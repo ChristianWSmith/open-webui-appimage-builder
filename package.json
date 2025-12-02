@@ -1,0 +1,35 @@
+{
+  "name": "open-webui-wrapper",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --linux AppImage"
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "build": {
+    "appId": "com.example.openwebuiwrapper",
+    "productName": "OpenWebUI Desktop",
+    "linux": {
+      "target": "AppImage",
+      "category": "Utility",
+      "executableName": "open-webui-desktop",
+      "maintainer": "You"
+    },
+    "files": [
+      "electron.js",
+      "open-webui/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "open-webui",
+        "to": "open-webui",
+        "filter": "**/*"
+      }
+    ]
+  }
+}
+
