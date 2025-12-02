@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-source "${SCRIPT_DIR}/common.sh"
 
+log "Checking for required tools..."
 requireTool pipenv
 requireTool npm
 
-pushd "${OPEN_WEBUI_DIR}" > /dev/null
-pipenv install --skip-lock
-wget https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/favicon.png -O icon.png
+pushd "${SCRIPT_DIR}" > /dev/null
+log "Locking pipenv..."
+pipenv lock
 popd > /dev/null
 
 pushd "${ROOT_DIR}" > /dev/null
-npm ci
+log "Locking node modules..."
+npm install --package-lock-only
 popd > /dev/null
