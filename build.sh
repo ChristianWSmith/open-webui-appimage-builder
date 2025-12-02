@@ -8,6 +8,7 @@ requireTool npm
 
 pushd "${OPEN_WEBUI_DIR}" > /dev/null
 pipenv install --skip-lock
+wget https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/favicon.png -O icon.png
 popd > /dev/null
 
 pushd "${ROOT_DIR}" > /dev/null

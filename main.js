@@ -14,6 +14,7 @@ async function createWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: false,
+      autoHideMenuBar: true,
       contextIsolation: true
     }
   });
