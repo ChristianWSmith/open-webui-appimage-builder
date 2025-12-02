@@ -18,3 +18,5 @@ requireTool() {
 
 export ROOT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 export OPEN_WEBUI_DIR="${ROOT_DIR}/open-webui"
+export PIPENV_VENV_IN_PROJECT=1
+
