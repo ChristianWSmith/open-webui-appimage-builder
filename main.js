@@ -58,7 +58,13 @@ app.whenReady().then(async () => {
   serverProcess = spawn(scriptPath, [port], {
     cwd: path.dirname(scriptPath),
     shell: true,
-    detached: true
+    detached: true,
+    env: {
+      ...process.env,
+      WEBUI_AUTH: process.env.WEBUI_AUTH || 'False',
+      DATA_DIR: process.env.DATA_DIR || app.getPath('appData'),
+      CACHE_DIR: process.env.CACHE_DIR || app.getPath('cache')
+    }
   });
 
   serverProcess.stdout.on('data', d => console.log("[server]", d.toString()));
