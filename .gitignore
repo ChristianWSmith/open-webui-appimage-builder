@@ -1,5 +1,6 @@
 open-webui/.venv/
 open-webui/icon.png
+open-webui/.webui_secret_key
 dist/
 node_modules/
 
