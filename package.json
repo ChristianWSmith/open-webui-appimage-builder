@@ -20,7 +20,7 @@
       "icon": "open-webui/icon.png"
     },
     "files": [
-      "electron.js",
+      "main.js",
       "open-webui/**/*"
     ],
     "extraResources": [
