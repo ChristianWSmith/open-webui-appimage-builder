@@ -5,6 +5,7 @@ source "${DIR}/common.sh"
 
 log "Checking for required tools..."
 requireTool pipenv
+requireTool pyenv
 requireTool npm
 
 pushd "${OPEN_WEBUI_DIR}" > /dev/null
