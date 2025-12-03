@@ -6,13 +6,18 @@ source "${DIR}/common.sh"
 log "Checking for required tools..."
 requireTool pipenv
 requireTool npm
+requireTool wget
 
 pushd "${OPEN_WEBUI_DIR}" > /dev/null
-log "Locking pipenv..."
-pipenv lock
+log "Installing pipenv..."
+pipenv install --skip-lock
+if [ ! -f icon.png ]; then
+	log "Downloading icon..."
+	wget https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/favicon.png -O icon.png
+fi
 popd > /dev/null
 
 pushd "${ROOT_DIR}" > /dev/null
-log "Locking node modules..."
-npm install --package-lock-only
+log "Installing node modules..."
+npm ci
 popd > /dev/null
