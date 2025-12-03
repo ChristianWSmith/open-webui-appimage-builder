@@ -6,8 +6,10 @@
     "start": "electron .",
     "dist": "electron-builder --linux AppImage"
   },
+  "dependencies": {
+    "get-port": "latest"
+  },
   "devDependencies": {
-    "get-port": "latest",
     "electron": "latest",
     "electron-builder": "latest"
   },
