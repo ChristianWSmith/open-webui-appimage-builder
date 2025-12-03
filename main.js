@@ -1,55 +1,49 @@
-const { app, BrowserWindow } = require("electron");
-const { spawn } = require("child_process");
-const path = require("path");
+const getPort = require('get-port');
+const { spawn } = require('child_process');
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+const net = require('net');
 
 let serverProcess;
 
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+async function waitForPort(port, host = '127.0.0.1') {
+  return new Promise(resolve => {
+    const tryConnect = () => {
+      const socket = net.createConnection({ port, host });
+      socket.on('connect', () => {
+        socket.end();
+        resolve();
+      });
+      socket.on('error', () => setTimeout(tryConnect, 200));
+    };
+    tryConnect();
+  });
 }
 
-async function createWindow() {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: false,
-      autoHideMenuBar: true,
-      contextIsolation: true
-    }
-  });
-
-  win.loadURL("http://127.0.0.1:8080");
+async function createWindow(port) {
+  const win = new BrowserWindow({ width: 1200, height: 800 });
+  await waitForPort(port);
+  win.loadURL(`http://127.0.0.1:${port}`);
 }
 
 app.whenReady().then(async () => {
-  const resources = process.resourcesPath;
-  const script = path.join(resources, "open-webui", "start.sh");
+  const port = await getPort({ port: getPort.makeRange(8000, 9000) });
+  console.log("Selected port:", port);
 
-  // launch your server
-  serverProcess = spawn(script, {
-    cwd: path.dirname(script),
+  const scriptPath = path.join(process.resourcesPath, 'open-webui', 'start.sh');
+
+  serverProcess = spawn(scriptPath, [port], {
+    cwd: path.dirname(scriptPath),
     shell: true,
-    detached: false
   });
 
-  serverProcess.stdout.on("data", (d) => {
-    console.log("[server]", d.toString());
-  });
+  serverProcess.stdout.on('data', d => console.log("[server]", d.toString()));
+  serverProcess.stderr.on('data', d => console.error("[server-error]", d.toString()));
 
-  serverProcess.stderr.on("data", (d) => {
-    console.error("[server-error]", d.toString());
-  });
-
-  // small delay to let it boot — Open-WebUI starts fast
-  await wait(1200);
-
-  await createWindow();
+  await createWindow(port);
 });
 
-app.on("will-quit", () => {
-  if (serverProcess) {
-    serverProcess.kill("SIGTERM");
-  }
+app.on('will-quit', () => {
+  if (serverProcess) serverProcess.kill('SIGTERM');
 });
 
