@@ -1,5 +1,5 @@
 {
-  "name": "Open WebUI Desktop",
+  "name": "open-webui-desktop",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "build": {
     "appId": "com.openwebui.openwebuidesktop",
-    "productName": "Open-WebUI-Desktop",
+    "productName": "Open WebUI Desktop",
     "linux": {
       "target": "AppImage",
       "category": "Utility",

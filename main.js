@@ -33,11 +33,11 @@ async function createWindow(port) {
       height: 800,
       autoHideMenuBar: true,
       icon: iconPath,
-      title: pjson.name
+      title: pjson.build.productName
     });
   win.webContents.on('page-title-updated', (event) => {
         event.preventDefault();
-        win.setTitle(pjson.name);
+        win.setTitle(pjson.build.productName);
     });
   win.loadURL(`http://127.0.0.1:${port}`);
 }
