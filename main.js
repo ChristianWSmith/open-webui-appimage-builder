@@ -62,8 +62,8 @@ app.whenReady().then(async () => {
     env: {
       ...process.env,
       WEBUI_AUTH: process.env.WEBUI_AUTH || 'False',
-      DATA_DIR: process.env.DATA_DIR || app.getPath('appData'),
-      CACHE_DIR: process.env.CACHE_DIR || app.getPath('cache')
+      DATA_DIR: process.env.DATA_DIR || app.getPath('userData'),
+      CACHE_DIR: process.env.CACHE_DIR || app.getPath('sessionData')
     }
   });
 
