@@ -11,8 +11,10 @@ requireTool wget
 pushd "${OPEN_WEBUI_DIR}" > /dev/null
 log "Installing pipenv..."
 pipenv install --skip-lock
-log "Downloading icon..."
-wget https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/favicon.png -O icon.png
+if [ ! -f icon.png ]; then
+	log "Downloading icon..."
+	wget https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/favicon.png -O icon.png
+fi
 popd > /dev/null
 
 pushd "${ROOT_DIR}" > /dev/null
