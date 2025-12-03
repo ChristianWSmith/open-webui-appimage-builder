@@ -3,6 +3,8 @@ const { spawn } = require('child_process');
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const net = require('net');
+const appName = 'Open WebUI Desktop';
+const appId = 'com.openwebui.openwebuidesktop';
 
 let serverProcess;
 
@@ -32,17 +34,17 @@ async function createWindow(port) {
       height: 800,
       autoHideMenuBar: true,
       icon: iconPath,
-      title: app.getName()
+      title: appName
     });
   win.webContents.on('page-title-updated', (event) => {
         event.preventDefault();
-        win.setTitle(app.getName());
+        win.setTitle(appName);
     });
   win.loadURL(`http://127.0.0.1:${port}`);
 }
 
 app.whenReady().then(async () => {
-  app.setAppUserModelId('com.openwebui.openwebuidesktop');
+  app.setAppUserModelId(appId);
 
   const port = await getPort({ port: [8000, 9000] });
   console.log("Selected port:", port);
