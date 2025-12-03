@@ -49,19 +49,20 @@ app.whenReady().then(async () => {
   const port = await getPort({ port: [8000, 9000] });
   console.log("Selected port:", port);
 
-  const scriptPath = path.join(
+  const serverPath = path.join(
     app.isPackaged ? process.resourcesPath : path.resolve(__dirname), 
-    'open-webui', 
-    'start.sh'
+    'open-webui', '.venv', 'bin', 'open-webui'
   );
 
-  serverProcess = spawn(scriptPath, [port], {
-    cwd: path.dirname(scriptPath),
+  serverProcess = spawn(serverPath, ["serve", "--port", port], {
+    cwd: path.dirname(serverPath),
     shell: true,
     detached: true,
     env: {
       ...process.env,
       WEBUI_AUTH: process.env.WEBUI_AUTH || 'False',
+      // WEBUI_SECRET_KEY: process.env.WEBUI_SECRET_KEY || 'yH7V8xtcbDMYqlxb',
+      WEBUI_SECRET_KEY: process.env.WEBUI_SECRET_KEY || '🤖',
       DATA_DIR: process.env.DATA_DIR || app.getPath('userData'),
       CACHE_DIR: process.env.CACHE_DIR || app.getPath('userData')
     }
