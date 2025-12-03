@@ -3,7 +3,6 @@ const { spawn } = require('child_process');
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const net = require('net');
-const pjson = require(path.join(__dirname, 'package.json'));
 
 let serverProcess;
 
@@ -33,18 +32,17 @@ async function createWindow(port) {
       height: 800,
       autoHideMenuBar: true,
       icon: iconPath,
-      title: pjson.build.productName
+      title: app.getName()
     });
   win.webContents.on('page-title-updated', (event) => {
         event.preventDefault();
-        win.setTitle(pjson.build.productName);
+        win.setTitle(app.getName());
     });
   win.loadURL(`http://127.0.0.1:${port}`);
 }
 
 app.whenReady().then(async () => {
-  const appId = pjson.build.appId;
-  app.setAppUserModelId(appId);
+  app.setAppUserModelId('com.openwebui.openwebuidesktop');
 
   const port = await getPort({ port: [8000, 9000] });
   console.log("Selected port:", port);
@@ -63,7 +61,7 @@ app.whenReady().then(async () => {
       ...process.env,
       WEBUI_AUTH: process.env.WEBUI_AUTH || 'False',
       DATA_DIR: process.env.DATA_DIR || app.getPath('userData'),
-      CACHE_DIR: process.env.CACHE_DIR || app.getPath('sessionData')
+      CACHE_DIR: process.env.CACHE_DIR || app.getPath('userData')
     }
   });
 
