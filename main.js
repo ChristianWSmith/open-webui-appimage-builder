@@ -56,7 +56,7 @@ app.whenReady().then(async () => {
 
   serverProcess = spawn(serverPath, ["serve", "--port", port], {
     cwd: path.dirname(serverPath),
-    shell: true,
+    shell: false,
     detached: true,
     env: {
       ...process.env,
