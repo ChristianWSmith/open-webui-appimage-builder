@@ -3,6 +3,7 @@ const { spawn } = require('child_process');
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const net = require('net');
+const pjson = require(path.join(__dirname, 'package.json'));
 
 let serverProcess;
 
@@ -21,17 +22,30 @@ async function waitForPort(port, host = '127.0.0.1') {
 }
 
 async function createWindow(port) {
+  const iconPath = path.join(
+    app.isPackaged ? process.resourcesPath : path.resolve(__dirname),
+    'open-webui',
+    'icon.png'
+  );
   const win = new BrowserWindow(
     {
       width: 1200,
       height: 800,
-      autoHideMenuBar: true
+      autoHideMenuBar: true,
+      icon: iconPath,
+      title: pjson.name
     });
-  await waitForPort(port);
+  win.webContents.on('page-title-updated', (event) => {
+        event.preventDefault();
+        win.setTitle(pjson.name);
+    });
   win.loadURL(`http://127.0.0.1:${port}`);
 }
 
 app.whenReady().then(async () => {
+  const appId = pjson.build.appId;
+  app.setAppUserModelId(appId);
+
   const port = await getPort({ port: [8000, 9000] });
   console.log("Selected port:", port);
 
@@ -50,12 +64,12 @@ app.whenReady().then(async () => {
   serverProcess.stdout.on('data', d => console.log("[server]", d.toString()));
   serverProcess.stderr.on('data', d => console.error("[server-error]", d.toString()));
 
+  await waitForPort(port);
   await createWindow(port);
 });
 
 app.on('will-quit', () => {
   if (serverProcess) {
-    // Kill the entire process group using the negative PID
     process.kill(-serverProcess.pid, 'SIGTERM');
   }
 });
